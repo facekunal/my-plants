@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kunal's Plants 🌿</title>
+<style>
+  :root { --bg:#f4f7f2; --card:#fff; --ink:#1f2a1f; --muted:#5f6b5f; --line:#e3e9e0; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:28px 18px 10px; text-align:center; }
+  h1 { margin:0; font-size:1.8rem; }
+  .sub { color:var(--muted); margin:6px 0 0; font-size:.95rem; }
+  .legend { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:14px 0 4px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; padding:16px; max-width:1200px; margin:0 auto; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .card img { width:100%; height:260px; object-fit:cover; display:block; background:#dde5d9; }
+  .body { padding:14px 16px 16px; }
+  .top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  h2 { margin:0; font-size:1.3rem; }
+  .sci { margin:2px 0 0; color:var(--muted); font-size:.88rem; font-style:italic; }
+  .pill { font-size:.75rem; font-weight:600; padding:4px 9px; border-radius:999px; white-space:nowrap; }
+  .good { background:#dcf3df; color:#1d6b2a; }
+  .fair { background:#fdf1cf; color:#8a6300; }
+  .stress { background:#fde3cf; color:#9a4a07; }
+  .weak { background:#fbd9d7; color:#a12a22; }
+  .facts { list-style:none; padding:0; margin:12px 0 0; display:grid; gap:7px; font-size:.92rem; }
+  .facts li { display:flex; gap:8px; }
+  .facts b { min-width:78px; display:inline-block; }
+  .note { margin:12px 0 0; padding:10px 12px; background:#f6f8f5; border-radius:10px; font-size:.88rem; color:#334; }
+  .warn { color:#a12a22; font-size:.85rem; margin:8px 0 0; }
+  footer { text-align:center; color:var(--muted); font-size:.8rem; padding:10px 16px 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌿 Kunal's Plants</h1>
+  <p class="sub">10 plants · Noida balcony · health checked 6 Oct 2026</p>
+  <div class="legend">
+    <span class="pill good">Healthy</span><span class="pill fair">Fair</span>
+    <span class="pill stress">Stressed</span><span class="pill weak">Weak</span>
+  </div>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<footer>Water by touch, not by calendar: push a finger into the soil before watering.<br>Water less from Nov to Feb.</footer>
+
+<script>
+const plants = [
+  { nick:"Dolly", emoji:"🌳", name:"China Doll Tree", sci:"Radermachera sinica", img:"dolly", status:"good", label:"Very healthy",
+    sun:"Bright light, some direct morning sun", water:"When top 3–4 cm is dry (every 2–3 days now)", feed:"Half-strength liquid, monthly till Nov",
+    note:"Star plant. Probably root-bound, so repot or top-dress in Feb–Mar. Trim the top to control height." },
+  { nick:"Bruno", emoji:"🍷", name:"Burgundy Rubber Plant", sci:"Ficus elastica 'Burgundy'", img:"bruno", status:"good", label:"Healthy",
+    sun:"Bright indirect, some gentle sun", water:"When top 5 cm is dry, empty the saucer", feed:"Monthly in growing season",
+    note:"Wipe leaves every 2 weeks. Rotate so it grows straight.", warn:"Milky sap can irritate skin." },
+  { nick:"Dusty", emoji:"✨", name:"Gold Dust Croton", sci:"Codiaeum variegatum 'Gold Dust'", img:"dusty", status:"good", label:"Healthy",
+    sun:"Bright light with morning sun", water:"When top 2–3 cm is dry, never bone-dry", feed:"Half-strength, monthly till Nov",
+    note:"Recovered after being moved. Mist and check leaf undersides for spider mites.", warn:"Sap is mildly toxic to pets." },
+  { nick:"Rosie", emoji:"🌸", name:"Desert Rose", sci:"Adenium obesum", img:"rosie", status:"fair", label:"Fair",
+    sun:"Full sun, 6+ hours", water:"Only when soil is fully dry (7–10 days)", feed:"Bloom fertiliser in summer",
+    note:"Remove spotted yellow leaves. Repot into a gritty, fast-draining mix. Keep it nearly dry in winter.", warn:"Sap is toxic." },
+  { nick:"Lucky", emoji:"🎋", name:"Lucky Bamboo", sci:"Dracaena sanderiana", img:"lucky", status:"fair", label:"Fair",
+    sun:"Bright indirect, no harsh sun", water:"Keep lightly moist, water when top 2 cm is dry", feed:"¼-strength liquid, monthly",
+    note:"Pale leaves and brown tips: use filtered or rested water and trim the tips." },
+  { nick:"Goldie", emoji:"⭐", name:"Variegated Umbrella Plant", sci:"Schefflera arboricola", img:"goldie", status:"fair", label:"Fair",
+    sun:"Bright indirect, near a window", water:"When top 3 cm is dry, empty the saucer", feed:"Half-strength, monthly",
+    note:"Indoor corner is too dim, so move it nearer the light. Turn it weekly. Remove fully yellow leaves." },
+  { nick:"Zig", emoji:"〰️", name:"Variegated Devil's Backbone", sci:"Euphorbia tithymaloides", img:"zig", status:"fair", label:"Fair",
+    sun:"Full sun to partial sun", water:"When dry 3–4 cm down (about weekly)", feed:"Light feed in summer only",
+    note:"Succulent-like, so it hates wet soil. Clear fallen leaves. Prune leggy stems in spring.", warn:"Milky sap irritates skin and eyes. Wear gloves." },
+  { nick:"Sunny", emoji:"☀️", name:"Croton (broad-leaf)", sci:"Codiaeum variegatum", img:"sunny", status:"stress", label:"Stressed",
+    sun:"Bright light, no harsh afternoon sun for now", water:"Deep drink now, then when top 2–3 cm is dry", feed:"None until it recovers",
+    note:"Drooping from thirst or being moved. Mist it and check for leaf-chewing pests (small holes).", warn:"Sap is mildly toxic to pets." },
+  { nick:"Ruby", emoji:"❤️", name:"Ti Plant / Red Cordyline", sci:"Cordyline fruticosa", img:"ruby", status:"weak", label:"Needs care",
+    sun:"Bright indirect or light shade (2–3 weeks)", water:"Keep evenly moist, not soggy", feed:"None for 3–4 weeks",
+    note:"Transplant shock or thirst. A new centre leaf means it's recovering. Use filtered water." },
+  { nick:"Dixie", emoji:"🍃", name:"Dumb Cane", sci:"Dieffenbachia", img:"dixie", status:"weak", label:"Needs care",
+    sun:"Bright indirect, no direct sun", water:"When top 3 cm is dry, evenly moist", feed:"Half-strength once the new leaf opens",
+    note:"Only 2 leaves plus a new shoot. Loosen the crusted soil and add compost.", warn:"Toxic sap, so keep away from pets and kids." },
+];
+document.getElementById("grid").innerHTML = plants.map(p => `
+  <article class="card">
+    <img src="img/${p.img}.jpg" alt="${p.nick}, ${p.name}" loading="lazy">
+    <div class="body">
+      <div class="top">
+        <div><h2>${p.emoji} ${p.nick}</h2><p class="sci">${p.name} (${p.sci})</p></div>
+        <span class="pill ${p.status}">${p.label}</span>
+      </div>
+      <ul class="facts">
+        <li><b>☀️ Sun</b><span>${p.sun}</span></li>
+        <li><b>💧 Water</b><span>${p.water}</span></li>
+        <li><b>🌱 Feed</b><span>${p.feed}</span></li>
+      </ul>
+      <p class="note">${p.note}</p>
+      ${p.warn ? `<p class="warn">⚠️ ${p.warn}</p>` : ""}
+    </div>
+  </article>`).join("");
+</script>
+</body>
+</html>
