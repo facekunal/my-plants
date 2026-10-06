@@ -29,6 +29,10 @@
   .facts b { min-width:78px; display:inline-block; }
   .note { margin:12px 0 0; padding:10px 12px; background:#f6f8f5; border-radius:10px; font-size:.88rem; color:#334; }
   .warn { color:#a12a22; font-size:.85rem; margin:8px 0 0; }
+  details { margin:10px 0 0; border:1px solid #f3c9c5; background:#fff6f5; border-radius:10px; padding:8px 12px; font-size:.88rem; }
+  summary { cursor:pointer; font-weight:600; color:#a12a22; }
+  details ul { margin:8px 0 2px; padding-left:18px; display:grid; gap:6px; }
+  .upd { margin:10px 0 0; font-size:.75rem; color:var(--muted); }
   footer { text-align:center; color:var(--muted); font-size:.8rem; padding:10px 16px 30px; }
 </style>
 </head>
@@ -48,34 +52,34 @@
 
 <script>
 const plants = [
-  { nick:"Dolly", emoji:"🌳", name:"China Doll Tree", sci:"Radermachera sinica", img:"dolly", status:"good", label:"Very healthy",
+  { nick:"Dolly", emoji:"🌳", name:"China Doll Tree", sci:"Radermachera sinica", img:"dolly", updated:"6 Oct 2026", status:"good", label:"Very healthy",
     sun:"Bright light, some direct morning sun", water:"When top 3–4 cm is dry (every 2–3 days now)", feed:"Half-strength liquid, monthly till Nov",
     note:"Star plant. Probably root-bound, so repot or top-dress in Feb–Mar. Trim the top to control height." },
-  { nick:"Bruno", emoji:"🍷", name:"Burgundy Rubber Plant", sci:"Ficus elastica 'Burgundy'", img:"bruno", status:"good", label:"Healthy",
+  { nick:"Bruno", emoji:"🍷", name:"Burgundy Rubber Plant", sci:"Ficus elastica 'Burgundy'", img:"bruno", updated:"6 Oct 2026", status:"good", label:"Healthy",
     sun:"Bright indirect, some gentle sun", water:"When top 5 cm is dry, empty the saucer", feed:"Monthly in growing season",
     note:"Wipe leaves every 2 weeks. Rotate so it grows straight.", warn:"Milky sap can irritate skin." },
-  { nick:"Dusty", emoji:"✨", name:"Gold Dust Croton", sci:"Codiaeum variegatum 'Gold Dust'", img:"dusty", status:"good", label:"Healthy",
+  { nick:"Dusty", emoji:"✨", name:"Gold Dust Croton", sci:"Codiaeum variegatum 'Gold Dust'", img:"dusty", updated:"6 Oct 2026", status:"good", label:"Healthy",
     sun:"Bright light with morning sun", water:"When top 2–3 cm is dry, never bone-dry", feed:"Half-strength, monthly till Nov",
     note:"Recovered after being moved. Mist and check leaf undersides for spider mites.", warn:"Sap is mildly toxic to pets." },
-  { nick:"Rosie", emoji:"🌸", name:"Desert Rose", sci:"Adenium obesum", img:"rosie", status:"fair", label:"Fair",
+  { nick:"Rosie", emoji:"🌸", name:"Desert Rose", sci:"Adenium obesum", img:"rosie", updated:"6 Oct 2026", status:"fair", label:"Fair",
     sun:"Full sun, 6+ hours", water:"Only when soil is fully dry (7–10 days)", feed:"Bloom fertiliser in summer",
     note:"Remove spotted yellow leaves. Repot into a gritty, fast-draining mix. Keep it nearly dry in winter.", warn:"Sap is toxic." },
-  { nick:"Lucky", emoji:"🎋", name:"Lucky Bamboo", sci:"Dracaena sanderiana", img:"lucky", status:"fair", label:"Fair",
+  { nick:"Lucky", emoji:"🎋", name:"Lucky Bamboo", sci:"Dracaena sanderiana", img:"lucky", updated:"6 Oct 2026", status:"fair", label:"Fair",
     sun:"Bright indirect, no harsh sun", water:"Keep lightly moist, water when top 2 cm is dry", feed:"¼-strength liquid, monthly",
     note:"Pale leaves and brown tips: use filtered or rested water and trim the tips." },
-  { nick:"Goldie", emoji:"⭐", name:"Variegated Umbrella Plant", sci:"Schefflera arboricola", img:"goldie", status:"fair", label:"Fair",
+  { nick:"Goldie", emoji:"⭐", name:"Variegated Umbrella Plant", sci:"Schefflera arboricola", img:"goldie", updated:"6 Oct 2026", status:"fair", label:"Fair",
     sun:"Bright indirect, near a window", water:"When top 3 cm is dry, empty the saucer", feed:"Half-strength, monthly",
     note:"Indoor corner is too dim, so move it nearer the light. Turn it weekly. Remove fully yellow leaves." },
-  { nick:"Zig", emoji:"〰️", name:"Variegated Devil's Backbone", sci:"Euphorbia tithymaloides", img:"zig", status:"fair", label:"Fair",
+  { nick:"Zig", emoji:"〰️", name:"Variegated Devil's Backbone", sci:"Euphorbia tithymaloides", img:"zig", updated:"6 Oct 2026", status:"fair", label:"Fair",
     sun:"Full sun to partial sun", water:"When dry 3–4 cm down (about weekly)", feed:"Light feed in summer only",
     note:"Succulent-like, so it hates wet soil. Clear fallen leaves. Prune leggy stems in spring.", warn:"Milky sap irritates skin and eyes. Wear gloves." },
-  { nick:"Sunny", emoji:"☀️", name:"Croton (broad-leaf)", sci:"Codiaeum variegatum", img:"sunny", status:"stress", label:"Stressed",
+  { nick:"Sunny", more:["Warning signs: leaves dropping one after another, or stems going soft or black at the base.","Don't move it again. Every move restarts the shock.","Check under the leaves for webbing (spider mites) or caterpillars. If you find any, spray neem oil (5 ml per litre) once a week for 3 weeks.","Cold below 15°C makes crotons drop leaves, so bring it in on cold winter nights.","Expect new tip growth in 3–4 weeks if it is recovering."], emoji:"☀️", name:"Croton (broad-leaf)", sci:"Codiaeum variegatum", img:"sunny", updated:"6 Oct 2026", status:"stress", label:"Stressed",
     sun:"Bright light, no harsh afternoon sun for now", water:"Deep drink now, then when top 2–3 cm is dry", feed:"None until it recovers",
     note:"Drooping from thirst or being moved. Mist it and check for leaf-chewing pests (small holes).", warn:"Sap is mildly toxic to pets." },
-  { nick:"Ruby", emoji:"❤️", name:"Ti Plant / Red Cordyline", sci:"Cordyline fruticosa", img:"ruby", status:"weak", label:"Needs care",
+  { nick:"Ruby", more:["Warning signs: the stem going soft, black or mushy at soil level (rot), or the centre leaves pulling out easily.","Don't overcorrect with too much water. Soggy soil plus shock causes root rot. Moist, not wet.","Brown leaf tips mean fluoride or salt in the water, so use RO, filtered or rested water.","No repotting and no fertiliser until a new leaf appears. Both stress weak roots.","The red colour comes back with steady care and bright indirect light, not harsh sun.","If there's no new leaf in 4 weeks, send a close-up of the stem base."], emoji:"❤️", name:"Ti Plant / Red Cordyline", sci:"Cordyline fruticosa", img:"ruby", updated:"6 Oct 2026", status:"weak", label:"Needs care",
     sun:"Bright indirect or light shade (2–3 weeks)", water:"Keep evenly moist, not soggy", feed:"None for 3–4 weeks",
     note:"Transplant shock or thirst. A new centre leaf means it's recovering. Use filtered water." },
-  { nick:"Dixie", emoji:"🍃", name:"Dumb Cane", sci:"Dieffenbachia", img:"dixie", status:"weak", label:"Needs care",
+  { nick:"Dixie", more:["Warning signs: yellowing new leaf, soft or mushy stem, or a foul smell from the soil (root rot).","The grey crusted soil is compacted and starved. Loosen the top layer and add compost. Do a full repot in spring.","Pale, droopy leaves mean thirst or too much sun. Keep it out of direct afternoon sun.","Don't let water sit in the saucer or the crown.","If the stem is long and bare, it can be cut and re-rooted in spring. Ask me before cutting.","Toxic: chewing a leaf causes painful mouth swelling. Wash your hands after touching the sap."], emoji:"🍃", name:"Dumb Cane", sci:"Dieffenbachia", img:"dixie", updated:"6 Oct 2026", status:"weak", label:"Needs care",
     sun:"Bright indirect, no direct sun", water:"When top 3 cm is dry, evenly moist", feed:"Half-strength once the new leaf opens",
     note:"Only 2 leaves plus a new shoot. Loosen the crusted soil and add compost.", warn:"Toxic sap, so keep away from pets and kids." },
 ];
@@ -94,6 +98,8 @@ document.getElementById("grid").innerHTML = plants.map(p => `
       </ul>
       <p class="note">${p.note}</p>
       ${p.warn ? `<p class="warn">⚠️ ${p.warn}</p>` : ""}
+      ${p.more ? `<details><summary>⚠️ Recovery plan · see more</summary><ul>${p.more.map(m => `<li>${m}</li>`).join("")}</ul></details>` : ""}
+      <p class="upd">📷 Photo: ${p.updated}</p>
     </div>
   </article>`).join("");
 </script>
